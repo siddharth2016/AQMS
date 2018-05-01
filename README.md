@@ -36,12 +36,15 @@ ppm goes above a particular level.
 
 * Arduino UNO
 * MQ135 Gas Sensor
+
 ![mq135](mq135.jpeg)
 
 * DHT11 Sensor
+
 ![dht11](dht11.png)
 
 * ESP8266 WiFi Module
+
 ![esp8266](esp8266.jpg)
 
 * Bread Board
