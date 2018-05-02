@@ -158,7 +158,7 @@ The user needs to login the ThingSpeak platform from the registered account to v
 the sensor data. The Arduino sketch manages to read sensor data and send the AT commands for
 connecting with the IOT platform.
 
-![Status](status_2.png)
+![Status](Status_2.png)
 
 
 ### Conclusion
