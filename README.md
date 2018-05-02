@@ -89,15 +89,15 @@ configured to connect with the ThingSpeak IOT platform. ThingSpeak is an IOT ana
 service that allows to aggregate, visualize and analyze live data streams in the cloud. ThingSpeak provides instant visualizations of data posted by the IOT devices to ThingSpeak server. With the
 ability to execute MATLAB code in ThingSpeak one can perform online analysis and processing
 of the data as it comes in. The Wi-Fi module can be connected with the ThingSpeak server by sending AT commands from
-the module. The module first test the AT startup by sending the following command - AT
+the module. The module first test the AT startup by sending the following command - **AT**
 
 The command is passed by the controller to the Wi-Fi module using software serial function. In
 response to the command 'AT', the platform must respond with 'OK' if the cloud service is running.
-Then, the AT command to view the version information is passed as follow - AT + GMR
+Then, the AT command to view the version information is passed as follow - **AT + GMR**
 
 In response to this command, the IOT platform must respond by sending back the version
 information, sdk version and the time bin is compiled. Next, the AT command to set the connection
-to Wi-Fi mode is sent as follow - AT + CWMODE = 3
+to Wi-Fi mode is sent as follow - **AT + CWMODE = 1**
 
 By setting the parameter in CWMODE to 3, the Wi-Fi connection is configured to SoftAP as well
 as station mode. This AT command can in fact take three parameters as follow -
@@ -105,3 +105,71 @@ as station mode. This AT command can in fact take three parameters as follow -
 1. set Wi-Fi connection to station mode
 2. set Wi-Fi connection to SoftAP mode
 3. set Wi-Fi connection to SoftAP + station mode
+
+In response to this command, the IOT platform must send back the string indication the Wi-Fi
+connection mode set. Now the AT command to reset the module is sent as follow - **AT + RST**
+
+In response to this command, the Wi-Fi module must restart and send back a response of 'OK'.
+After resetting the module, AT command to setup multiple connections is enabled by sending the
+following command - **AT + CIPMUX=1**
+
+This AT command can take two parameters - 0 for setting single connection and 1 for setting
+multiple connections. Next, the command to connect with the Access Point (AP) is passed which takes two parameters where first parameter is the SSID of the registered cloud service on
+ThingSpeak and the other parameter is the password to login the cloud service.
+
+**AT+CWJAP=\"SSID\",\"PASS\”**
+
+Now, the AT command to get local IP address is passed as follow - **AT + CIFSR**
+
+In response to this command, the local IP address of the Wi-Fi connection is sent back by the
+module. Now, the module is ready to establish TCP IP connection with the ThingSpeak server. The
+controller reads the sensor data and store it in a string variable. The TCP IP connection is
+established by sending the following AT command - **AT + CIPSTART = 4, "TCP", "184.106.153.149", 80**
+
+The AT + CIPSTART command can be used to establish a TCP connection, register an UDP port or
+establish an SSL connection. In the above command, it is used to establish a TCP IP connection.
+For establishing a TCP-IP connection, the command takes four parameters where first parameter is
+link ID which can be a number between 0 to 4, second parameter is connection type which can be
+TCP or UDP, third parameter is remote IP address or IP address of the cloud service to connect
+with and last parameter is detection time interval for checking if the connection is live. If the last
+parameter is set to 0, the TCP keep-alive feature is disabled otherwise a time interval in seconds
+range from 1 to 7200 can be passed as parameter. In response to this command, the server must
+respond with 'OK' if connection is successfully established otherwise it should respond with
+message 'ERROR'.
+
+Now when the connection with the server is successfully established and the controller has read
+the sensor value, it can send the data to the cloud using the following command - **AT + CIPSEND = 4**
+
+This command takes four parameters, where first parameter is the link ID which can be a number
+between 0 to 4, second parameter is data length which can be maximum 2048 bytes long, third
+parameter is remote IP in case of an UDP connection and remote port number in case of UDP
+connection. The third and fourth parameter are optional and used only in case of UDP connection
+with the server. Since, the TCP IP connection is established, these parameters are not used. The
+command is followed by a string containing the URL having the field names and values passed
+through the HTTP GET method. In this project, a string containing the URL having API Key and
+the sensor value as the field and value is passed. The passed field and its value are logged on the
+cloud server. It is important to pass the API key in this URL as one of the field-value in order to
+connect with the registered cloud service. The Air quality measured by sensor can now be monitored and recorded through the thingspeak IOT plat form through the Wi-Fi module. The
+recorded data is shown at the ThingSpeak platform as follow -
+
+![Status](status_1.png)
+
+The user needs to login the ThingSpeak platform from the registered account to view and monitor
+the sensor data. The Arduino sketch manages to read sensor data and send the AT commands for
+connecting with the IOT platform.
+
+![Status](status_2.png)
+
+
+### Conclusion
+
+The Automatic Air quality management system is a step forward to contribute a solution to the
+biggest threat. The air monitoring system overcomes the problem of the highly-polluted areas
+which is a major issue. It supports the new technology and effectively supports the healthy life
+concept. This system has features for the people to monitor the amount of pollution on their mobile
+phones using the application. The system to monitor the air of environment using Arduino
+microcontroller, IOT Technology is proposed to improve quality of air. With the use of IOT
+technology enhances the process of monitoring various aspects of environment such as air quality
+monitoring issue proposed in this paper.
+
+![Finished Project Image](project_image.png)
